@@ -8,6 +8,8 @@
 #               : GADM Philippines RData file;
 # outputs       : ;
 # remarks 1     : Demo of GIS in R;
+# remarks 2     : This script requires a broadband internet connection to
+#               : download data;
 ##############################################################################
 
 #### Libraries ####
@@ -22,14 +24,12 @@ library(RColorBrewer)
 ## create a temp file and directory for downloading files
 #tf <- tempfile()
 ## mean monthly diurnal temperature range ####
-#download.file("http://www.cru.uea.ac.uk/cru/data/hrg/tmc/grid_10min_dtr.dat.gz", tf)
-#dtr <- read.table(tf, header = FALSE, colClasses = "numeric", nrows = 566262) # use header, colClasses and nrows to speed input into R
-dtr <- read.table("diurnalT.csv", header = TRUE, colClasses = "numeric", nrows = 566262) # use header, colClasses and nrows to speed input into R
+download.file("http://www.cru.uea.ac.uk/cru/data/hrg/tmc/grid_10min_dtr.dat.gz", tf)
+dtr <- read.table(tf, header = FALSE, colClasses = "numeric", nrows = 566262) # use header, colClasses and nrows to speed input into R
 
 ## mean monthly temperature ####
-#download.file("http://www.cru.uea.ac.uk/cru/data/hrg/tmc/grid_10min_tmp.dat.gz", tf)
-#tmp <- read.table(tf, header = FALSE, colClasses = "numeric", nrows = 566262) # use header, colClasses and nrows to speed input into R
-tmp <- read.csv("monthlyT.csv", header = TRUE, colClasses = "numeric", nrows = 566262) # use header, colClasses and nrows to speed input into R
+download.file("http://www.cru.uea.ac.uk/cru/data/hrg/tmc/grid_10min_tmp.dat.gz", tf)
+tmp <- read.table(tf, header = FALSE, colClasses = "numeric", nrows = 566262) # use header, colClasses and nrows to speed input into R
 
 ##### Fetch GADM RData File for Philippines #####
 PHL <- getData(country = "PHL", level = 0)
@@ -61,6 +61,7 @@ create.stack <- function(wvar, xy, wrld, months){
   rm(x)
 }
 
+# Use the create.stack function to create a raster stack of minimum temperature
 tmn.stack <- create.stack(tmn, xy, wrld, months)
 
 ## Plot May min temps
@@ -114,16 +115,21 @@ ggplot(May, aes(x = x, y = y, fill = cuts, colour = cuts)) +
   coord_map("cylindrical") # set map projection
 
 #### Plot this on Google Earth ####
+# Use the RColorBrewer package to create a new palette for plotting
 my.palette <- colorRampPalette(brewer.pal(length(seq(14, 18, by = 1)),
                                 "YlOrRd"), space = "Lab")
 
+# Take the fifth layer, May, of the raster stack object and create a new SpatialPixelsDataframe
+# for cutting and plotting as factors
 May.KML <- as(tmn.stack[[5]], "SpatialPixelsDataFrame")
+# When you change from a raster object to SpatialPixelsDataFrame, you need to reproject for GoogleEarth
 May.KML <- reproject(May.KML)
+# Cut the data creating a column of factors
 May.KML$cuts <- cut(May.KML$may,
                     breaks = seq(14, 18, by = 1),
                            include.lowest = TRUE)
 
-
+# Use plotKML function to plot SpatialPixelsDataFrame and open in GoogleEarth
 plotKML(May.KML["cuts"],
         subfolder.name = "May Temps Below 18º C",
         layer.name = "May Temps Below 18º C",
