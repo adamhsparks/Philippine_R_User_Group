@@ -7,8 +7,7 @@
 # inputs        : CRU CL2.0 Climate data;
 #               : GADM Philippines RData file;
 # outputs       : ;
-# remarks 1     : Downloads and calculates min/max T and generates raster stacks
-#               : of precip, min/max/mean T;
+# remarks 1     : Demo of GIS in R;
 ##############################################################################
 
 #### Libraries ####
