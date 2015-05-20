@@ -21,14 +21,16 @@ library(RColorBrewer)
 
 ##### Download and read CRU data files ####
 ## create a temp file and directory for downloading files
-tf <- tempfile()
+#tf <- tempfile()
 ## mean monthly diurnal temperature range ####
-download.file("http://www.cru.uea.ac.uk/cru/data/hrg/tmc/grid_10min_dtr.dat.gz", tf)
-dtr <- read.table(tf, header = FALSE, colClasses = "numeric", nrows = 566262) # use header, colClasses and nrows to speed input into R
+#download.file("http://www.cru.uea.ac.uk/cru/data/hrg/tmc/grid_10min_dtr.dat.gz", tf)
+#dtr <- read.table(tf, header = FALSE, colClasses = "numeric", nrows = 566262) # use header, colClasses and nrows to speed input into R
+dtr <- read.table("diurnalT.csv", header = TRUE, colClasses = "numeric", nrows = 566262) # use header, colClasses and nrows to speed input into R
 
 ## mean monthly temperature ####
-download.file("http://www.cru.uea.ac.uk/cru/data/hrg/tmc/grid_10min_tmp.dat.gz", tf)
-tmp <- read.table(tf, header = FALSE, colClasses = "numeric", nrows = 566262) # use header, colClasses and nrows to speed input into R
+#download.file("http://www.cru.uea.ac.uk/cru/data/hrg/tmc/grid_10min_tmp.dat.gz", tf)
+#tmp <- read.table(tf, header = FALSE, colClasses = "numeric", nrows = 566262) # use header, colClasses and nrows to speed input into R
+tmp <- read.csv("monthlyT.csv", header = TRUE, colClasses = "numeric", nrows = 566262) # use header, colClasses and nrows to speed input into R
 
 ##### Fetch GADM RData File for Philippines #####
 PHL <- getData(country = "PHL", level = 0)
@@ -67,8 +69,8 @@ plot(tmn.stack[[5]])
 
 ## Crop raster stacks using PHL object
 tmn.stack <- crop(tmn.stack, PHL)
-## Plot resulting layer for January, still has a bit of Borneo
-plot(tmn.stack[[5]])
+## Plot resulting layer for January
+plot(tmn.stack[[5]])# still has a bit of Borneo
 
 ## Mask raster
 tmn.stack <- mask(tmn.stack, PHL)
