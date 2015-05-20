@@ -6,7 +6,8 @@
 # last update   : in Los Baños, Laguna, PI May 2015;
 # inputs        : CRU CL2.0 Climate data;
 #               : GADM Philippines RData file;
-# outputs       : ;
+# outputs       : GGPLOT2 and GoogleEarth maps of minimum temperatures <18 ºC
+#               : in the Philippines in May;
 # remarks 1     : Demo of GIS in R;
 # remarks 2     : This script requires a broadband internet connection to
 #               : download data;
