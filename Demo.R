@@ -22,16 +22,20 @@ library(RColorBrewer)
 
 ##### Download and read CRU data files ####
 ## create a temp file and directory for downloading files
-#tf <- tempfile()
+tf <- tempfile()
 ## mean monthly diurnal temperature range ####
+# Download data into tempfile created previously
 download.file("http://www.cru.uea.ac.uk/cru/data/hrg/tmc/grid_10min_dtr.dat.gz", tf)
-dtr <- read.table(tf, header = FALSE, colClasses = "numeric", nrows = 566262) # use header, colClasses and nrows to speed input into R
+# Use header, colClasses and nrows to speed input into R
+dtr <- read.table(tf, header = FALSE, colClasses = "numeric", nrows = 566262) 
 
 ## mean monthly temperature ####
 download.file("http://www.cru.uea.ac.uk/cru/data/hrg/tmc/grid_10min_tmp.dat.gz", tf)
-tmp <- read.table(tf, header = FALSE, colClasses = "numeric", nrows = 566262) # use header, colClasses and nrows to speed input into R
+# Use header, colClasses and nrows to speed input into R
+tmp <- read.table(tf, header = FALSE, colClasses = "numeric", nrows = 566262) 
 
 ##### Fetch GADM RData File for Philippines #####
+# getData() function is part of raster package
 PHL <- getData(country = "PHL", level = 0)
 
 #### calculate tmax and tmin from tmp and dtr (see: http://www.cru.uea.ac.uk/cru/data/hrg/tmc/readme.txt) #####
